@@ -1,0 +1,10 @@
+language: objective-c
+osx_image: xcode8.2
+before_install:
+- brew cask uninstall oclint
+- brew tap oclint/formulae
+- brew install oclint
+script:
+- xcodebuild analyze | tee xcodebuild.log
+- oclint-xcodebuild xcodebuild.log
+- oclint-json-compilation-database -v -e Pods -- -report-type html -o oclintReport.html -disable-rule ObjCAssignIvarOutsideAccessors -rc=MINIMUM_CASES_IN_SWITCH=3  -rc=LONG_VARIABLE_NAME=20  -disable-rule ShortVariableName  -rc=CYCLOMATIC_COMPLEXITY=10 -rc=LONG_CLASS=700 -rc=LONG_LINE=200 -rc=LONG_METHOD=80 -rc=NCSS_METHOD=40 -rc=NESTED_BLOCK_DEPTH=5 -rc=TOO_MANY_FIELDS=20 -rc=TOO_MANY_METHODS=30 -rc=TOO_MANY_PARAMETERS=6
